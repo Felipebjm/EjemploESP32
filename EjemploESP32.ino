@@ -8,6 +8,8 @@
 
 #define DHTTYPE DHT11   
 
+#define LED_PIN 2
+bool estadoLED = false;
 // Inicializar el sensor DHT11
 // Se crea un objeto llamado dht de la clase DHT (clase incluida en la libreria)
 DHT dht(DHTPIN, DHTTYPE);
@@ -17,11 +19,17 @@ void setup() {
   Serial.println(F("DHTxx test!"));
 
   dht.begin();
+
+  pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
+   
   // Timer de 2 segundo entre mediciones
   delay(2000);
+
+  estadoLED = !estadoLED;               // Cambia estado del led (encido o apagado)
+  digitalWrite(LED_PIN, estadoLED);     // Lo aplica
 
   //Lectura de datos del sensor
   float humedad = dht.readHumidity();
@@ -50,4 +58,9 @@ void loop() {
   Serial.print(F("°C "));
   Serial.print(indiceFah);
   Serial.println(F("°F"));
+  if(estadoLED == true){
+    Serial.println("Led apagado");
+  } else{
+    Serial.println("led encencido");
+  }
 }
